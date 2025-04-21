@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FeedbackStatistics, GiveFeedback } from "./components";
+import { Statistics, GiveFeedback } from "./components";
 
 const FeedBack = () => {
   const [goodCount, setGoodCount] = useState(0);
@@ -23,7 +23,7 @@ const FeedBack = () => {
         handleNeutralCount={handleNeutralCount}
         handleBadCount={handleBadCount}
       />
-      <FeedbackStatistics
+      <Statistics
         goodCount={goodCount}
         neutralCount={neutralCount}
         badCount={badCount}

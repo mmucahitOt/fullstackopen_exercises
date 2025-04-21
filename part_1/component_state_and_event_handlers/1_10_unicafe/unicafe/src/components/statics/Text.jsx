@@ -2,7 +2,7 @@ const Text = ({ text, value }) => {
   return (
     <p>
       {text}
-      {value ?? ": " + value}
+      {value ? ": " + value : ""}
     </p>
   );
 };
