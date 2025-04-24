@@ -6,13 +6,6 @@ const App = () => {
 
   const handleNameInputChange = (event) => {
     setNewName(event.target.value);
-    const nameIsAlreadyInUse = persons.some(
-      (person) => person.name === event.target.value
-    );
-    if (nameIsAlreadyInUse) {
-      alert(`${newName} is already added to phonebook`);
-      setNewName("");
-    }
   };
 
   const handleNameSubmit = (event) => {
