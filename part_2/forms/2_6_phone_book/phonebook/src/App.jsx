@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 const App = () => {
+  const [filterByName, setFilterByName] = useState("");
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
 
