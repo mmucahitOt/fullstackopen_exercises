@@ -18,6 +18,16 @@ app.get("/info", (request, response) => {
   );
 });
 
+app.get("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const person = persons.find((person) => person.id === id);
+  if (person) {
+    response.json(person);
+  } else {
+    response.status(404).end();
+  }
+});
+
 app.listen(3001, () => {
   console.log("Server is running on port 3001");
 });
