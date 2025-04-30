@@ -1,9 +1,8 @@
-import { Countries, CountryFilterInput } from "./components";
+import { Countries } from "./components";
 
-export const CountryListBulk = ({ filter, setFilter, countries }) => {
+export const CountryListBulk = ({ countries }) => {
   return (
     <div>
-      <CountryFilterInput filter={filter} setFilter={setFilter} />
       <Countries countries={countries} />
     </div>
   );

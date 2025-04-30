@@ -1,9 +1,6 @@
-import { CountryFilterInput } from "./components";
-
-export const CountryListSummary = ({ filter, setFilter }) => {
+export const CountryListSummary = () => {
   return (
     <div>
-      <CountryFilterInput filter={filter} setFilter={setFilter} />
       <div>Too many matches, specify another filter</div>
     </div>
   );

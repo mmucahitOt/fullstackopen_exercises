@@ -1,13 +1,8 @@
-import {
-  CapitalWeather,
-  CountryDetail,
-  CountryFilterInput,
-} from "./components";
+import { CapitalWeather, CountryDetail } from "./components";
 
-export const CountryListSingleItem = ({ country, filter, setFilter }) => {
+export const CountryListSingleItem = ({ country }) => {
   return (
     <div>
-      <CountryFilterInput filter={filter} setFilter={setFilter} />
       <CountryDetail country={country} />
       <CapitalWeather
         latitude={country.latlng[0]}

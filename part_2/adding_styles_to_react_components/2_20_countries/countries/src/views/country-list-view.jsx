@@ -4,6 +4,7 @@ import {
   CountryListBulk,
   CountryListSummary,
 } from "./components";
+import { CountryFilterInput } from "./components/components";
 
 const CountryListView = ({ countries }) => {
   const [filteredCountries, setFilteredCountries] = useState(countries);
@@ -25,26 +26,19 @@ const CountryListView = ({ countries }) => {
     }
   }, [filter, countries]);
 
-  if (filteredCountries.length > 10) {
-    return <CountryListSummary filter={filter} setFilter={setFilter} />;
-  }
-
-  if (filteredCountries.length === 1) {
-    return (
-      <CountryListSingleItem
-        country={filteredCountries[0]}
-        filter={filter}
-        setFilter={setFilter}
-      />
-    );
-  }
-
   return (
-    <CountryListBulk
-      filter={filter}
-      setFilter={setFilter}
-      countries={filteredCountries}
-    />
+    <div>
+      <CountryFilterInput filter={filter} setFilter={setFilter} />
+      {filteredCountries.length > 10 && (
+        <CountryListSummary filter={filter} setFilter={setFilter} />
+      )}
+      {filteredCountries.length === 1 && (
+        <CountryListSingleItem country={filteredCountries[0]} />
+      )}
+      {filteredCountries.length > 1 && filteredCountries.length <= 10 && (
+        <CountryListBulk countries={filteredCountries} />
+      )}
+    </div>
   );
 };
 
