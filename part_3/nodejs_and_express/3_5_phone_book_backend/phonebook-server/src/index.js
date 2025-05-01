@@ -1,18 +1,21 @@
 const express = require("express");
 const app = express();
-let persons = require("./data/persons");
-const { generateId } = require("./common/id-generator");
+const personService = require("./data/person-service");
+const personApiValidator = require("./validators/person-api.validator");
+
+app.use(express.json());
 
 app.get("/", (request, response) => {
   response.send("<h1>Hello World</h1>");
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(persons);
+  response.json(personService.getAll());
 });
 
 app.get("/info", (request, response) => {
   const date = new Date();
+  const persons = personService.getAll();
   response.send(
     `<p>Phonebook has info for ${persons.length} people</p>
     <p>${date.toString()}</p>`
@@ -21,7 +24,7 @@ app.get("/info", (request, response) => {
 
 app.get("/api/persons/:id", (request, response) => {
   const id = request.params.id;
-  const person = persons.find((person) => person.id === id);
+  const person = personService.getById(id);
   if (person) {
     response.json(person);
   } else {
@@ -32,22 +35,17 @@ app.get("/api/persons/:id", (request, response) => {
 app.delete("/api/persons/:id", (request, response) => {
   const id = request.params.id;
   console.log("id", id);
-  persons = persons.filter((person) => person.id !== id);
+  personService.deletePerson(id);
   response.status(204).end();
 });
 
 app.post("/api/persons", (request, response) => {
-  const body = JSON.parse(request.body);
-  console.log("body", body);
-  if (!body.name || !body.number) {
-    return response.status(400).json({ error: "content missing" });
+  if (!personApiValidator.validateCreatePerson(request, response)) {
+    return;
   }
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: generateId(),
-  };
-  persons = persons.concat(person);
+
+  const body = request.body;
+  const person = personService.addPerson(body.name, body.number);
   response.json(person);
 });
 
