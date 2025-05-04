@@ -1,0 +1,23 @@
+GET http://44.226.145.213:3001/api/persons
+
+###
+
+GET http://44.226.145.213:3001/api/persons/5
+
+###
+
+DELETE http://44.226.145.213:3001/api/persons/1
+
+###
+
+POST http://44.226.145.213:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "number": "1234567890"
+}
+
+
+
+
