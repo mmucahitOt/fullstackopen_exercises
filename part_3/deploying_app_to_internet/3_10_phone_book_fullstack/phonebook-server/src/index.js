@@ -1,13 +1,12 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-const cors = require("cors");
-
 const personService = require("./data/person-service");
 const personApiValidator = require("./validators/person-api.validator");
 
-app.use(cors());
 app.use(express.json());
+
+app.use(express.static("dist"));
 
 // Create a custom token for request body
 morgan.token("body", (req) => JSON.stringify(req.body));
