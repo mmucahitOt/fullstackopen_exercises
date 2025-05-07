@@ -3,9 +3,7 @@ let persons = require("../data/persons");
 const Person = require("../models/person.model");
 
 const getAll = () => {
-  return Person.find({}).then((result) =>
-    result.map((person) => person.toJSON())
-  );
+  return Person.find({});
 };
 
 const getById = (id) => {
@@ -13,12 +11,12 @@ const getById = (id) => {
 };
 
 const deletePerson = (id) => {
-  return persons.filter((person) => person.id !== id);
+  return Person.findByIdAndDelete(id);
 };
 
 const addPerson = ({ name, number }) => {
   const person = new Person({ name, number });
-  return person.save().then((result) => result);
+  return person.save();
 };
 
 const nameExists = (name) => {
