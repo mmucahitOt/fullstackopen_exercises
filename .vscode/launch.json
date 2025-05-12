@@ -9,8 +9,8 @@
       "request": "launch",
       "name": "Launch Phonebook Server",
       "skipFiles": ["<node_internals>/**"],
-      "cwd": "${workspaceFolder}\\part_3\\saving_data_to_db\\3_15_phonebook_fullstack\\phonebook-server",
-      "program": "${workspaceFolder}\\part_3\\saving_data_to_db\\3_15_phonebook_fullstack\\phonebook-server\\src\\index.js"
+      "cwd": "${workspaceFolder}\\part_3\\saving_data_to_db\\3_16_phonebook_fullstack\\phonebook-server",
+      "program": "${workspaceFolder}\\part_3\\saving_data_to_db\\3_16_phonebook_fullstack\\phonebook-server\\src\\index.js"
     }
   ]
 }
