@@ -16,15 +16,6 @@ const update = (id, newPerson) => {
     .then((response) => response.data);
 };
 
-const upsert = (newPerson) => {
-  return create(newPerson).catch((error) => {
-    if (error.response.status === 400) {
-      return update(newPerson.id, newPerson);
-    }
-    throw error;
-  });
-};
-
 const deletePerson = (id) => {
   return axios.delete(`${baseUrl}/${id}`).then((response) => response.data);
 };
