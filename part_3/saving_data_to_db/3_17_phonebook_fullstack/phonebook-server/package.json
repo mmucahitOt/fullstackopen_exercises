@@ -1,6 +1,7 @@
 {
   "name": "phonebook-server",
   "version": "1.0.0",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",

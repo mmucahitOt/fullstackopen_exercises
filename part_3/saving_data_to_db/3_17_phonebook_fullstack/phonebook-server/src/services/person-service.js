@@ -17,6 +17,10 @@ const addPerson = ({ name, number }) => {
   return person.save();
 };
 
+const updatePerson = (id, { name, number }) => {
+  return Person.findByIdAndUpdate(id, { name, number }, { new: true });
+};
+
 const nameExists = (name) => {
   return Person.findOne({ name });
 };
@@ -30,7 +34,7 @@ module.exports = {
   getById,
   deletePerson,
   addPerson,
-
+  updatePerson,
   nameExists,
   idExists,
 };

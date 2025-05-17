@@ -1,10 +1,10 @@
-const personService = require("../services/person-service");
+const personService = require("../../services/person-service");
 const {
   nameMissing,
   numberMissing,
   personAlreadyExists,
   personNotExists,
-} = require("../errors/validation.errors");
+} = require("../../errors/validation.errors");
 
 const validateCreatePersonMiddleware = (request, response, next) => {
   if (!request.body.name) {
@@ -18,6 +18,7 @@ const validateCreatePersonMiddleware = (request, response, next) => {
     .nameExists(request.body.name)
     .then((person) => {
       if (person) {
+        personAlreadyExists.userId = person.id;
         return next(personAlreadyExists);
       }
       next();
@@ -40,9 +41,13 @@ const validateUpdatePersonMiddleware = (request, response, next) => {
 const validationMiddleware = (request, response, next) => {
   if (request.method === "POST") {
     validateCreatePersonMiddleware(request, response, next);
+    return;
   } else if (request.method === "PUT") {
     validateUpdatePersonMiddleware(request, response, next);
+    return;
   }
+
+  next();
 };
 
 module.exports = { validationMiddleware };

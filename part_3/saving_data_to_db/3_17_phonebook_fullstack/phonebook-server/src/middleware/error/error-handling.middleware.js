@@ -3,8 +3,8 @@ const {
   numberMissing,
   nameMustBeUnique,
   personAlreadyExists,
-} = require("../errors/validation.errors");
-const { castError } = require("../errors/errors");
+} = require("../../errors/validation.errors");
+const { castError } = require("../../errors/errors");
 
 const errorHandler = (error, request, response, next) => {
   // validation error handling
@@ -24,7 +24,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === personAlreadyExists.name) {
     return response
       .status(personAlreadyExists.code)
-      .send({ error: personAlreadyExists.message });
+      .send({ error: personAlreadyExists.message, userId: error.userId });
   }
 
   // entity field validations
@@ -32,7 +32,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === nameMustBeUnique.name) {
     return response
       .status(nameMustBeUnique.code)
-      .send({ error: nameMustBeUnique.message });
+      .send({ error: nameMustBeUnique.message});
   }
 
   // db lvl error handling
