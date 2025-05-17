@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FormInput, FormSubmitButton } from "../../components";
+import phoneService from "../../services/person-service";
+import { nameMissing, numberMissing, personAlreadyExists, personNotFound } from "../../errors/validation.errors";
 
-const FormPerson = ({ persons, handlePersonCreate, handlePersonUpdate }) => {
+
+const FormPerson = ({handleNotification, fetchPersons}) => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
 
@@ -13,11 +16,21 @@ const FormPerson = ({ persons, handlePersonCreate, handlePersonUpdate }) => {
     setNewNumber(event.target.value);
   };
 
-  const handlePersonUpdateDialog = (person, newPerson) => {
+  const handlePersonUpdateDialog = (userId, newPerson) => {
+    console.log("handlePersonUpdateDialog", userId, newPerson);
     window.confirm(
-      `${person.name} is already added to phonebook, replace the old number with a new one?`
+      `${newPerson.name} is already added to phonebook, replace the old number with a new one?`
     )
-      ? handlePersonUpdate(person.id, newPerson)
+      ? phoneService.update(userId, newPerson).then(() => {
+          handleNotification({
+            message: `Updated ${newPerson.name}`,
+            type: "success",
+          });
+          setNewName("");
+          setNewNumber("");
+        }).catch((error) => {
+          handleUpdatePersonErrors(error, newPerson, handleNotification, handlePersonUpdateDialog);
+        })
       : null;
   };
 
@@ -27,19 +40,23 @@ const FormPerson = ({ persons, handlePersonCreate, handlePersonUpdate }) => {
       name: newName,
       number: newNumber,
     };
-    const alreadyExistingPerson = persons.find(
-      (person) => person.name === newName
-    );
-    if (alreadyExistingPerson) {
-      newPerson.id = String(alreadyExistingPerson.id);
-      handlePersonUpdateDialog(alreadyExistingPerson, newPerson);
-    } else {
-      newPerson.id = String(persons.length + 1);
-      handlePersonCreate(newPerson).then(() => {
-        setNewName("");
-        setNewNumber("");
+
+
+    phoneService.create(newPerson).then((createdPerson) => {
+      console.log("createdPerson", createdPerson);
+      handleNotification({
+        message: `Added ${createdPerson.name}`, 
+        type: "success",
       });
-    }
+      setNewName("");
+      setNewNumber("");
+
+    }).catch((error) => {
+      handleCreatePersonErrors(error, newPerson, handleNotification, handlePersonUpdateDialog);
+      })
+      .finally(() => {
+        fetchPersons();
+      });
   };
   return (
     <form>
@@ -60,5 +77,46 @@ const FormPerson = ({ persons, handlePersonCreate, handlePersonUpdate }) => {
     </form>
   );
 };
+
+
+function handleCreatePersonErrors(error, newPerson, handleNotification, handlePersonUpdateDialog) {
+  if (error.response.status === 400 && error.response.data.error === personAlreadyExists.message) {
+    handlePersonUpdateDialog(error.response.data.userId, newPerson);
+  } 
+  if (error.response.status === 400 && error.response.data.error === nameMissing.message) {
+    handleNotification({
+      message: "name is required",
+      type: "error",
+    });
+  }
+  if (error.response.status === 400 && error.response.data.error === numberMissing.message) {
+    handleNotification({
+      message: "number is required",
+      type: "error",
+    });
+  }
+}
+
+function handleUpdatePersonErrors(error, newPerson, handleNotification) {
+  if (error.response.status === 400 && error.response.data.error === nameMissing.message) {
+    handleNotification({
+      message: "name is required",
+      type: "error",
+    });
+  }
+  if (error.response.status === 400 && error.response.data.error === numberMissing.message) {
+    handleNotification({
+      message: "number is required",
+      type: "error",
+    });
+  }
+  if (error.response.status === 400 && error.response.data.error === personNotFound.message) {
+    handleNotification({
+      message: "person not found",
+      type: "error",
+    });
+  }
+}
+
 
 export default FormPerson;

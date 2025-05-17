@@ -15,7 +15,6 @@ const Phonebook = () => {
   const fetchPersons = () => {
     return phoneService.getAll().then((persons) => {
       setPersons(persons);
-      setFilteredPersons(persons);
     });
   };
 
@@ -26,29 +25,17 @@ const Phonebook = () => {
     }, 3000);
   };
 
-  const handlePersonCreate = (newPerson) => {
-    return fetchPersons().then(() => {
-      console.log("fetchPersons");
-      phoneService
-        .create(newPerson)
-        .then((createdPerson) => {
-          setPersons(persons.concat(createdPerson));
-          setFilteredPersons(persons.concat(createdPerson));
-          handleNotification({
-            message: `Added ${createdPerson.name}`,
-            type: "success",
-          });
-        })
-        .finally(() => {
-          fetchPersons();
-        });
-    });
-  };
 
   const handlePersonDelete = (person) => {
     fetchPersons().then(() => {
       phoneService
         .deletePerson(person.id)
+        .then(() => {
+          handleNotification({
+            message: `Deleted ${person.name}`,
+            type: "success",
+          });
+        })
         .finally(() => {
           fetchPersons();
         })
@@ -65,30 +52,6 @@ const Phonebook = () => {
     });
   };
 
-  const handlePersonUpdate = (id, newPerson) => {
-    fetchPersons().then(() => {
-      phoneService
-        .update(id, newPerson)
-        .then((updatedPerson) => {
-          setPersons(
-            persons.map((person) => (person.id === id ? updatedPerson : person))
-          );
-          setFilteredPersons(
-            filteredPersons.map((person) =>
-              person.id === id ? updatedPerson : person
-            )
-          );
-          handleNotification({
-            message: `Updated ${updatedPerson.name}`,
-            type: "success",
-          });
-        })
-        .finally(() => {
-          fetchPersons();
-        });
-    });
-  };
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -96,10 +59,8 @@ const Phonebook = () => {
 
       <Filter persons={persons} setFilteredPersons={setFilteredPersons} />
       <FormPerson
-        persons={persons}
-        handlePersonCreate={handlePersonCreate}
-        handlePersonUpdate={handlePersonUpdate}
         handleNotification={handleNotification}
+        fetchPersons={fetchPersons}
       />
       <Numbers
         persons={filteredPersons}

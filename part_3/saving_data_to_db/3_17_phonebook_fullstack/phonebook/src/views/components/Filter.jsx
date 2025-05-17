@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Filter = ({ persons, setFilteredPersons }) => {
   const [filterByName, setFilterByName] = useState("");
+
+  useEffect(() => {
+    const filteredPersons = filterPersons(persons, filterByName);
+    setFilteredPersons(filteredPersons);
+  }, [persons, filterByName, setFilteredPersons]);
 
   const handleFilterByNameChange = (event) => {
     const filterValue = event.target.value;
@@ -13,9 +18,7 @@ const Filter = ({ persons, setFilteredPersons }) => {
       setFilteredPersons(persons);
     } else {
       // Otherwise, filter the persons
-      const filteredPersons = persons.filter((person) =>
-        person.name.toLowerCase().includes(filterValue.toLowerCase())
-      );
+      const filteredPersons = filterPersons(persons, filterValue);
       setFilteredPersons(filteredPersons);
     }
   };
@@ -29,6 +32,12 @@ const Filter = ({ persons, setFilteredPersons }) => {
         onChange={handleFilterByNameChange}
       />
     </div>
+  );
+};
+
+const filterPersons = (persons, filterByName) => {
+  return persons.filter((person) =>
+    person.name.toLowerCase().includes(filterByName.toLowerCase())
   );
 };
 
